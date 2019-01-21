@@ -1,0 +1,3 @@
+"index.html" is used to keep a raw copy of the website to be hosted on the ESP8266.
+
+I make changes within "index.html" using VS Code so it stays readable. After making any changes, select all double quotes and place a backslash escape character before each (this will make the site legible within C/C++). Then, copy and paste all of the sites code into an html compresser (this will remove line breaks, again, this is for legibility within C/C++). Now you can copy that code and paste it into the the .ino file in place of the text within the webSite variable.

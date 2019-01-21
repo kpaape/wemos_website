@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            font-family: sans-serif;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+        :root {
+            --primary-color: rgb(20, 200, 260);
+            --background-color: white;
+        }
+        body {
+            background-color: var(--primary-color);
+            margin: 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px;
+            color: white;
+            background-color: var(--primary-color);
+            cursor: pointer;
+        }
+        #container {
+            width: 400px;
+            max-width: 90vw;
+            padding: 20px;
+            margin: 20px auto;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"> 
+        <h1>Wemos D1 R2</h1>
+        <a id="ledBtn" class="button" onclick="toggleLed()">Toggle LED</a>
+        <p id="ledStatus">LED is Off</p>
+
+        
+        <a id="testing" class="button" onclick="handleTest()">Test POST args</a>
+    </div>
+
+    <script>
+        if(typeof(Storage) != "undefined") {
+            console.log("Saving compatible");
+            
+            if(!localStorage["builtinLed"]) {
+                localStorage["builtinLed"] = "Off";
+            } else {
+                handleLed();
+            }
+
+            console.log(localStorage);
+        } else {
+            console.log("Not compatible");
+        }
+
+        function toggleLed() {
+            if(localStorage["builtinLed"] == "Off") {
+                localStorage["builtinLed"] = "On";
+            } else {
+                localStorage["builtinLed"] = "Off";
+            }
+            handleLed();
+        }
+
+        function handleLed() {
+            var ledStatus = localStorage["builtinLed"];
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "/post", true);
+            xhttp.send("ledStatus=" + ledStatus);
+            document.getElementById("ledStatus").innerHTML = "LED is " + localStorage["builtinLed"];
+        }
+
+        function handleTest() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "/handle_test", true);
+            xhttp.send("cheese=burger&ham=sandwich");
+        }
+    </script>
+</body>
+</html>
