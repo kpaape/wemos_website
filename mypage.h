@@ -1,3 +1,4 @@
+const char MAIN_header[] PROGMEM = R"=====(
 <!DOCTYPE html>
 <html>
 <head>
@@ -111,9 +112,9 @@
         </nav>
         <main>
 
+)=====";
 
-
-
+const char MAIN_index[] PROGMEM = R"=====(
             <!-- INDEX -->
             <a id='led_builtin' class='button' onclick='toggleLed(this)'>Builtin LED Toggle</a>
             <a id='led_builtin' class='button' onclick='turnOnLed(this)'>Builtin LED On</a>
@@ -126,9 +127,9 @@
             <br>
             <a id='led_5' class='button' onclick='toggleLed(this)'>LED on pin 5</a>
             <div id='led_5' class='led off'></div>
+)=====";
 
-
-
+const char MAIN_test[] PROGMEM = R"=====(
 
             <!-- TEST PAGE -->
             <h2>Test Arguments</h2>
@@ -137,10 +138,9 @@
             <div id='input_with_btn'>
                 <input id='str_testStr' class='attachVariable'><a id='str_testStr' class='button' onclick=''>Submit</a>
             </div>
+)=====";
 
-
-
-
+const char MAIN_footer[] PROGMEM = R"=====(
         </main>
     </div>
 
@@ -220,3 +220,4 @@
     </script>
 </body>
 </html>
+)=====";
