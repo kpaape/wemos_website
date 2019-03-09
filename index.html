@@ -76,13 +76,12 @@
             height: 40px;
             margin: 0;
         }
-        .led {
+        .digital {
             display: inline-block;
             width: 25px;
             height: 25px;
             margin: 15px;
-            border: 3px solid var(--secondary-color);
-            border-radius: 25px;
+            border: 20px solid var(--secondary-color);
             vertical-align: bottom;
         }
         .on {
@@ -92,6 +91,22 @@
         .off {
             background-color: white;
         }
+        .HIGH {
+            margin-top: 0px;
+            border-color: transparent transparent var(--secondary-color) transparent;
+        }
+        .LOW {
+            margin-bottom: 0px;
+            border-color: var(--secondary-color) transparent transparent transparent;
+        }
+            /* 
+            
+            border-color: var(--secondary-color) transparent transparent transparent;
+            border-color: transparent var(--secondary-color) transparent transparent;
+            border-color: transparent transparent var(--secondary-color) transparent;
+            border-color: transparent transparent transparent var(--secondary-color);
+            
+            */
     </style>
 </head>
 <body>
@@ -112,25 +127,29 @@
         <main>
 
 
+<!-- 
+    change toggleLed to digitalToggle
+    change turnOnLed to digitalHigh
+    change turnOffLed to digitalLow
+-->
 
-
-            <!-- INDEX -->
-            <a id='led_builtin' class='button' onclick='toggleLed(this)'>Builtin LED Toggle</a>
-            <a id='led_builtin' class='button' onclick='turnOnLed(this)'>Builtin LED On</a>
-            <a id='led_builtin' class='button' onclick='turnOffLed(this)'>Builtin LED Off</a>
-            <div id='led_builtin' class='led off'></div>
+<!-- INDEX -->
+            <a id='digital_builtin' class='button' onclick='digitalHigh(this)'>Builtin LED HIGH</a>
+            <a id='digital_builtin' class='button' onclick='digitalLow(this)'>Builtin LED LOW</a>
+            <a id='digital_builtin' class='button' onclick='digitalToggle(this)'>Builtin LED Toggle</a>
+            <div id='digital_builtin' class='digital LOW'></div>
 
             <br>
-            <a id='led_4' class='button' onclick='toggleLed(this)'>LED on pin 4</a>
-            <div id='led_4' class='led off'></div>
+            <a id='digital_4' class='button' onclick='digitalToggle(this)'>Pin 4</a>
+            <div id='digital_4' class='digital LOW'></div>
             <br>
-            <a id='led_5' class='button' onclick='toggleLed(this)'>LED on pin 5</a>
-            <div id='led_5' class='led off'></div>
+            <a id='digital_5' class='button' onclick='digitalToggle(this)'>Pin 5</a>
+            <div id='digital_5' class='digital LOW'></div>
 
 
 
 
-            <!-- TEST PAGE -->
+<!-- TEST PAGE -->
             <h2>Test Arguments</h2>
             <a id='testing' class='button' onclick='handleTest()'>Test POST args</a>
             
@@ -138,68 +157,77 @@
                 <input id='str_testStr' class='attachVariable'><a id='str_testStr' class='button' onclick=''>Submit</a>
             </div>
 
+            <h3>Delete Local Storage</h3>
+            <a id='deleteLocalStorage' class='button' onclick='deleteLocalStorage()'>Delete Storage</a>
 
 
+<!-- FOOTER SECTION -->
 
         </main>
     </div>
 
     <script>
+        var digitalDefault = 'LOW'; // change this to HIGH if you would like all digital variables to be set to HIGH by default
+
+        function deleteLocalStorage() {
+            localStorage.clear();
+        }
+
         function getVars() {
-            var varArr = document.getElementsByClassName('led');
+            var varArr = document.getElementsByClassName('digital');
             for(var i = 0; i < varArr.length; i++) {
-                if(varArr[i].id.split('_')[0] == 'led') {
+                if(varArr[i].id.split('_')[0] == 'digital') {
                     if(!localStorage[varArr[i].id]) {
-                        localStorage[varArr[i].id] = 'off';
+                        localStorage[varArr[i].id] = digitalDefault;
                     }
-                    console.log(varArr[i].id + ' is an led');
-                    handleLed(varArr[i].id);
+                    console.log(varArr[i].id + ' is a digital');
+                    handleDigital(varArr[i].id);
                 } else {
-                    console.log(varArr[i].id + ' is not an led');
+                    console.log(varArr[i].id + ' is not digital');
                 }
             }
         }
 
-        function toggleLed(thisEle) {
-            var led = thisEle.id;
-            if(localStorage[led] == 'off') {
-                localStorage[led] = 'on';
+        function digitalToggle(thisEle) {
+            var digital = thisEle.id;
+            if(localStorage[digital] == 'LOW') {
+                localStorage[digital] = 'HIGH';
             } else {
-                localStorage[led] = 'off';
+                localStorage[digital] = 'LOW';
             }
-            handleLed(led);
+            handleDigital(digital);
         }
 
-        function turnOffLed(thisEle) {
-            var led = thisEle.id;
-            localStorage[led] = 'off';
-            handleLed(led);
+        function digitalLow(thisEle) {
+            var digital = thisEle.id;
+            localStorage[digital] = 'LOW';
+            handleDigital(digital);
         }
 
-        function turnOnLed(thisEle) {
-            var led = thisEle.id;
-            localStorage[led] = 'on';
-            handleLed(led);
+        function digitalHigh(thisEle) {
+            var digital = thisEle.id;
+            localStorage[digital] = 'HIGH';
+            handleDigital(digital);
         }
 
-        function handleLed(led) {
-            var leds = document.getElementsByClassName('led');
-            for(var i = 0; i < leds.length; i++) {
-                if(leds[i].id == led) {
-                    if(localStorage[led] == 'on') {
-                        leds[i].className = 'led on';
+        function handleDigital(digital) {
+            var digitalIO = document.getElementsByClassName('digital');
+            for(var i = 0; i < digitalIO.length; i++) {
+                if(digitalIO[i].id == digital) {
+                    if(localStorage[digital] == 'HIGH') {
+                        digitalIO[i].className = 'digital HIGH';
                     } else {
-                        leds[i].className = 'led off';
+                        digitalIO[i].className = 'digital LOW';
                     }
                 }
             }
 
-            var ledPin = led.split('_')[1];
-            var ledStatus = localStorage[led];
-            console.log('Post Data: ' + 'ledStatus=' + ledStatus + '&ledPin=' + ledPin)
+            var digitalPin = digital.split('_')[1];
+            var digitalStatus = localStorage[digital];
+            console.log('Post Data: ' + 'digitalStatus=' + digitalStatus + '&digitalPin=' + digitalPin)
             var xhttp = new XMLHttpRequest();
             xhttp.open('POST', '/post', true);
-            xhttp.send('ledStatus=' + ledStatus + '&ledPin=' + ledPin);
+            xhttp.send('digitalStatus=' + digitalStatus + '&digitalPin=' + digitalPin);
         }
 
         function handleTest() {

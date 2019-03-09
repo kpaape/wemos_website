@@ -73,16 +73,16 @@ void handleTest() {
   }
 }
 
-void handleOnOff(String statusOnOff, String statusPin) {
+void handleOnOff(String statusHighLow, String statusPin) {
   if(statusPin == "builtin") {
-    if(statusOnOff == "on") {
-      digitalWrite(LED_BUILTIN, LOW);
-    } else {
+    if(statusHighLow == "HIGH") {
       digitalWrite(LED_BUILTIN, HIGH);
+    } else {
+      digitalWrite(LED_BUILTIN, LOW);
     }
   } else {
     if(statusPin == "4") {
-      Serial.print("Make pin 4 code");
+      Serial.println("Make pin 4 code");
     }
   }
 }
@@ -92,7 +92,7 @@ void handlePost() {
     Serial.print("POST Arguments: " );
     Serial.println(server.args());
     for(int i = 0; i < server.args(); i++){
-      if(server.argName(i) == "ledStatus") {
+      if(server.argName(i) == "digitalStatus") {
         handleOnOff(server.arg(i), server.arg(i+1));
       }
       Serial.print("Name: "); Serial.println(server.argName(i));
